@@ -5,14 +5,22 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(functions.config().sendgrid.apikey);
 
 const app = express();
+app.options("*", cors({ origin: "*" }));
 app.use(cors({ origin: "*" }));
 
 const fromEmail = functions.config().sendgrid.emailfrom;
 const toEMail = functions.config().sendgrid.emailto;
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 /** Send Email -- SUBSCRIBER */
 app.post("/subscriber-email", (req, res) => {
   res.header("Content-Type", "application/json");
+  res.set("Access-Control-Allow-Origin", "*");
+
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
@@ -40,24 +48,33 @@ app.post("/subscriber-email", (req, res) => {
       "Fashone Team.",
   };
 
-  (async () => {
-    try {
-      await sgMail.send(AdminEmailConfig);
-      await sgMail.send(UserEmailConfig);
-      response.set("Access-Control-Allow-Origin", "*");
-      res.status(200).send(JSON.stringify({ success: true }));
-    } catch (error) {
-      console.error(error);
-      if (error.response) {
-        console.error(error.response.body);
+  if (req.method === "OPTIONS") {
+    // Send response to OPTIONS requests
+    res.set("Access-Control-Allow-Methods", "POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Max-Age", "3600");
+    res.status(204).send("");
+  } else {
+    (async () => {
+      try {
+        await sgMail.send(AdminEmailConfig);
+        await sgMail.send(UserEmailConfig);
+        res.set("Access-Control-Allow-Origin", "*");
+        res.status(200).send(JSON.stringify({ success: true }));
+      } catch (error) {
+        console.error(error);
+        if (error.response) {
+          console.error(error.response.body);
+        }
       }
-    }
-  })();
+    })();
+  }
 });
 
 /** Send Email -- Fashionista */
 app.post("/fashionista-email", (req, res) => {
   res.header("Content-Type", "application/json");
+  res.set("Access-Control-Allow-Origin", "*");
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
@@ -95,24 +112,33 @@ app.post("/fashionista-email", (req, res) => {
       "Fashone Team.",
   };
 
-  (async () => {
-    try {
-      await sgMail.send(AdminEmailConfig);
-      await sgMail.send(UserEmailConfig);
-      res.status(200).send(JSON.stringify({ success: true }));
-    } catch (error) {
-      console.error(error);
+  if (req.method === "OPTIONS") {
+    // Send response to OPTIONS requests
+    res.set("Access-Control-Allow-Methods", "GET");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Max-Age", "3600");
+    res.status(204).send("");
+  } else {
+    (async () => {
+      try {
+        await sgMail.send(AdminEmailConfig);
+        await sgMail.send(UserEmailConfig);
+        res.status(200).send(JSON.stringify({ success: true }));
+      } catch (error) {
+        console.error(error);
 
-      if (error.response) {
-        console.error(error.response.body);
+        if (error.response) {
+          console.error(error.response.body);
+        }
       }
-    }
-  })();
+    })();
+  }
 });
 
 /** Send Email -- Fashion Seeker Registration */
 app.post("/fashion-register-email", (req, res) => {
   res.header("Content-Type", "application/json");
+  res.set("Access-Control-Allow-Origin", "*");
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
@@ -145,19 +171,27 @@ app.post("/fashion-register-email", (req, res) => {
       "Fashone Team.",
   };
 
-  (async () => {
-    try {
-      await sgMail.send(AdminEmailConfig);
-      await sgMail.send(UserEmailConfig);
-      res.status(200).send(JSON.stringify({ success: true }));
-    } catch (error) {
-      console.error(error);
+  if (req.method === "OPTIONS") {
+    // Send response to OPTIONS requests
+    res.set("Access-Control-Allow-Methods", "GET");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Max-Age", "3600");
+    res.status(204).send("");
+  } else {
+    (async () => {
+      try {
+        await sgMail.send(AdminEmailConfig);
+        await sgMail.send(UserEmailConfig);
+        res.status(200).send(JSON.stringify({ success: true }));
+      } catch (error) {
+        console.error(error);
 
-      if (error.response) {
-        console.error(error.response.body);
+        if (error.response) {
+          console.error(error.response.body);
+        }
       }
-    }
-  })();
+    })();
+  }
 });
 
 // // Create and Deploy Your First Cloud Functions
