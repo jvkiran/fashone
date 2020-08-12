@@ -47,7 +47,7 @@ function Footer() {
       };
       await axios
         .post(
-          "http://127.0.0.1:5001/fashone-273611/us-central1/api/subscriber-email",
+          "https://us-central1-fashone-273611.cloudfunctions.net/api/subscriber-email",
           data
         )
         .then((res) => {

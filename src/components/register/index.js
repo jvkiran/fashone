@@ -47,8 +47,8 @@ function Register({ active }) {
     if (validateForm(errors)) {
       let sendGridApi =
         socialName === ""
-          ? "http://127.0.0.1:5001/fashone-273611/us-central1/api/fashion-register-email"
-          : "http://127.0.0.1:5001/fashone-273611/us-central1/api/fashionista-email";
+          ? "https://us-central1-fashone-273611.cloudfunctions.net/api/fashion-register-email"
+          : "https://us-central1-fashone-273611.cloudfunctions.net/api/fashionista-email";
       let data = {
         type:
           socialName === ""
