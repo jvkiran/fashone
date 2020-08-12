@@ -1,14 +1,18 @@
 const functions = require("firebase-functions");
 const express = require("express");
+const cors = require("cors");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(functions.config().sendgrid.apikey);
 
 const app = express();
+app.use(cors({ origin: "*" }));
+
 const fromEmail = functions.config().sendgrid.emailfrom;
 const toEMail = functions.config().sendgrid.emailto;
 
 /** Send Email -- SUBSCRIBER */
 app.post("/subscriber-email", (req, res) => {
+  res.header("Content-Type", "application/json");
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
@@ -40,6 +44,7 @@ app.post("/subscriber-email", (req, res) => {
     try {
       await sgMail.send(AdminEmailConfig);
       await sgMail.send(UserEmailConfig);
+      response.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(JSON.stringify({ success: true }));
     } catch (error) {
       console.error(error);
@@ -52,6 +57,7 @@ app.post("/subscriber-email", (req, res) => {
 
 /** Send Email -- Fashionista */
 app.post("/fashionista-email", (req, res) => {
+  res.header("Content-Type", "application/json");
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
@@ -106,6 +112,7 @@ app.post("/fashionista-email", (req, res) => {
 
 /** Send Email -- Fashion Seeker Registration */
 app.post("/fashion-register-email", (req, res) => {
+  res.header("Content-Type", "application/json");
   let AdminEmailConfig = {
     to: [fromEmail, toEMail],
     from: fromEmail,
