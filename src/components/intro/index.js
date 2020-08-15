@@ -13,7 +13,7 @@ function Intro({ active }) {
       <div className="intro-container app-container">
         <div className="intro-container-img">
           <ReactPlayer
-            url="https://www.youtube.com/watch?v=jawJJJkpU8I"
+            url="https://youtu.be/j_YYh-LhHug"
             width="100%"
             height="100%"
           ></ReactPlayer>
